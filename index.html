@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Library Branch — Riverside, CA</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:     #1a1208;
+    --paper:   #f5f0e8;
+    --cream:   #ede7d3;
+    --warm:    #c8a96e;
+    --accent:  #8b3a2a;
+    --sage:    #5a7a5a;
+    --muted:   #8a7f6e;
+    --card:    #faf7f2;
+    --border:  #d4c9b0;
+    --shadow:  rgba(26,18,8,0.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lora', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 52px;
+    border-bottom: 2px solid var(--warm);
+  }
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--paper);
+    letter-spacing: 0.01em;
+  }
+  .nav-brand span { color: var(--warm); }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--warm); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    background: var(--ink);
+    padding: 5rem 3rem 5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--warm);
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--warm);
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    color: var(--paper);
+    margin-bottom: 2rem;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--warm);
+    display: block;
+  }
+  .hero-desc {
+    font-family: 'Lora', serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.72);
+    max-width: 38ch;
+    margin-bottom: 2.5rem;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--accent);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    padding: 0.85rem 1.75rem;
+    transition: background 0.2s;
+    align-self: flex-start;
+  }
+  .hero-cta:hover { background: #a0442f; }
+  .hero-right {
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 3rem;
+    position: relative;
+  }
+  /* Decorative tree SVG */
+  .hero-tree {
+    width: min(340px, 90%);
+    opacity: 0.18;
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+  }
+  .hero-stats {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .hero-stat { }
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ink);
+    display: block;
+  }
+  .hero-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 0.25rem;
+    display: block;
+  }
+  .hero-rule {
+    width: 3rem;
+    height: 2px;
+    background: var(--warm);
+    margin: 0.75rem 0;
+  }
+  .hero-pull {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 26ch;
+    border-left: 3px solid var(--accent);
+    padding-left: 1.25rem;
+  }
+
+  /* ── SECTION STRUCTURE ── */
+  .section {
+    padding: 5rem 0;
+  }
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--ink);
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  /* ── ABOUT / MISSION ── */
+  .about-section { background: var(--paper); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .about-body p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    margin-bottom: 1.4rem;
+    color: var(--ink);
+  }
+  .about-body p:last-child { margin-bottom: 0; }
+  .about-body strong { font-weight: 600; }
+  .about-sidebar { }
+  .sidebar-block {
+    border-top: 2px solid var(--border);
+    padding-top: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .sidebar-block:last-child { margin-bottom: 0; }
+  .sidebar-block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--warm);
+    margin-bottom: 0.6rem;
+  }
+  .sidebar-block p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .three-meanings {
+    margin-top: 1rem;
+  }
+  .meaning-item {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    margin-bottom: 0.85rem;
+  }
+  .meaning-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--warm);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .meaning-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .meaning-text strong {
+    font-weight: 600;
+    display: block;
+  }
+
+  /* ── BRANCHES ── */
+  .branches-section { background: var(--cream); }
+  .branches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .branch-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.75rem;
+    box-shadow: 0 2px 8px var(--shadow);
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .branch-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--sage);
+  }
+  .branch-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow);
+  }
+  .branch-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  .branch-locs {
+    margin-top: 0.85rem;
+  }
+  .branch-loc {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .branch-loc::before {
+    content: '📍';
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+  .branch-status {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.5rem;
+    background: rgba(90,122,90,0.12);
+    color: var(--sage);
+    border: 1px solid rgba(90,122,90,0.25);
+    margin-bottom: 0.5rem;
+  }
+  .branches-empty {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem;
+  }
+
+  /* ── LFL ORDERS ── */
+  .orders-section { background: var(--paper); }
+  .orders-intro {
+    max-width: 65ch;
+    margin-bottom: 3rem;
+  }
+  .orders-intro p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .orders-intro p:last-child { margin-bottom: 0; }
+
+  .orders-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  /* Book catalog */
+  .catalog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .catalog-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .catalog-filter {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: none;
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  .book-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .book-item:last-child { border-bottom: none; }
+  .book-item:hover { background: var(--cream); }
+  .book-item.selected { background: rgba(90,122,90,0.08); border-left: 3px solid var(--sage); padding-left: calc(1.1rem - 2px); }
+  .book-item-info { flex: 1; min-width: 0; }
+  .book-item-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .book-item-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+  .book-item-genre {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--warm);
+    margin-top: 0.1rem;
+  }
+  .book-item-qty {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--sage);
+    text-align: right;
+    min-width: 28px;
+  }
+  .book-item-qty-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .book-item-add {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .book-item-add:hover, .book-item.selected .book-item-add {
+    background: var(--sage);
+    color: white;
+    border-color: var(--sage);
+  }
+
+  /* Cart / Order form */
+  .order-panel {
+    position: sticky;
+    top: 70px;
+  }
+  .order-panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .cart-empty {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 1.5rem;
+    border: 1px dashed var(--border);
+    margin-bottom: 1.25rem;
+  }
+  .cart-items {
+    margin-bottom: 1.25rem;
+  }
+  .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item-title {
+    flex: 1;
+    font-size: 0.88rem;
+    font-family: 'Lora', serif;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cart-qty-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .qty-btn {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--border);
+    background: none;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .qty-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .qty-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    min-width: 18px;
+    text-align: center;
+  }
+  .cart-remove {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0 0.2rem;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .cart-remove:hover { color: var(--accent); }
+
+  /* Contact form */
+  .contact-form { margin-top: 0.5rem; }
+  .form-group { margin-bottom: 0.9rem; }
+  .form-label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+  }
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--warm); }
+  .form-textarea { resize: vertical; min-height: 70px; }
+  .submit-btn {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.9rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+  .submit-btn:hover { background: #a0442f; }
+  .submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
+  .form-success {
+    background: rgba(90,122,90,0.1);
+    border: 1px solid rgba(90,122,90,0.3);
+    padding: 1.25rem;
+    text-align: center;
+    display: none;
+  }
+  .form-success p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--sage);
+  }
+  .form-success small {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    display: block;
+    margin-top: 0.4rem;
+  }
+
+  /* ── EVENTS ── */
+  .events-section { background: var(--ink); }
+  .events-section .section-header { border-bottom-color: var(--warm); }
+  .events-section .section-label { color: var(--warm); opacity: 0.7; }
+  .events-section .section-title { color: var(--paper); }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .event-card {
+    border: 1px solid rgba(212,201,176,0.2);
+    padding: 1.75rem;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .event-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--sage);
+  }
+  .event-card:hover { border-color: rgba(200,169,110,0.4); }
+  .event-date-block {
+    margin-bottom: 1rem;
+  }
+  .event-month {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--warm);
+  }
+  .event-day {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--paper);
+  }
+  .event-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .event-title-pub {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--paper);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  .event-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--warm);
+    margin-bottom: 0.25rem;
+  }
+  .event-loc {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .event-desc-pub {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: rgba(245,240,232,0.6);
+  }
+  .events-empty {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem;
+    border: 1px solid rgba(212,201,176,0.15);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--cream);
+    border-top: 2px solid var(--border);
+    padding: 3rem 2.5rem;
+  }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+  .footer-brand span { color: var(--accent); }
+  .footer-tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.4rem;
+  }
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.9;
+    text-align: right;
+  }
+
+  /* ── LOADING / STATES ── */
+  .loading-dots {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 2rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.85rem 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    z-index: 9999;
+    transform: translateY(120%);
+    transition: transform 0.3s;
+    max-width: 280px;
+  }
+  #toast.show { transform: translateY(0); }
+  #toast.success { border-left: 3px solid var(--sage); }
+  #toast.error   { border-left: 3px solid var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 3.5rem 2rem; min-height: 60vh; }
+    .hero-left::after { display: none; }
+    .hero-right { padding: 3rem 2rem; min-height: 40vh; }
+    .hero-stats { flex-direction: row; flex-wrap: wrap; gap: 2rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .orders-layout { grid-template-columns: 1fr; }
+    .order-panel { position: static; }
+    .section-inner { padding: 0 1.5rem; }
+    nav { padding: 0 1.5rem; }
+    .nav-links { gap: 1.25rem; }
+    .footer-meta { text-align: left; }
+  }
+  @media (max-width: 560px) {
+    .nav-links { display: none; }
+    .hero-title { font-size: 3rem; }
+    .section { padding: 3.5rem 0; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow { animation: fadeUp 0.6s ease both; }
+  .hero-title   { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-desc    { animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-cta     { animation: fadeUp 0.6s 0.3s ease both; }
+  .hero-stats   { animation: fadeUp 0.7s 0.15s ease both; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">The Library <span>Branch</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#branches">Branches</a></li>
+    <li><a href="#orders">Little Free Library</a></li>
+    <li><a href="#events">Events</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <h1 class="hero-title">The<br>Library<br><em>Branch</em></h1>
+    <p class="hero-desc">A community book-sharing initiative putting curated shelves inside locally-owned Riverside businesses — and keeping Little Free Libraries stocked across the city.</p>
+    <a href="#orders" class="hero-cta">Request books for your Little Free Library →</a>
+  </div>
+  <div class="hero-right">
+    <!-- Decorative tree -->
+    <svg class="hero-tree" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M150 380 L150 180" stroke="#1a1208" stroke-width="12" stroke-linecap="round"/>
+      <path d="M150 300 L90 240" stroke="#1a1208" stroke-width="7" stroke-linecap="round"/>
+      <path d="M150 270 L210 210" stroke="#1a1208" stroke-width="7" stroke-linecap="round"/>
+      <path d="M150 240 L80 180" stroke="#1a1208" stroke-width="6" stroke-linecap="round"/>
+      <path d="M150 220 L220 160" stroke="#1a1208" stroke-width="6" stroke-linecap="round"/>
+      <path d="M150 200 L110 150" stroke="#1a1208" stroke-width="5" stroke-linecap="round"/>
+      <path d="M150 190 L190 140" stroke="#1a1208" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="150" cy="100" rx="85" ry="90" fill="#1a1208"/>
+      <ellipse cx="88" cy="145" rx="50" ry="52" fill="#1a1208"/>
+      <ellipse cx="212" cy="138" rx="52" ry="54" fill="#1a1208"/>
+      <ellipse cx="115" cy="72" rx="42" ry="44" fill="#1a1208"/>
+      <ellipse cx="185" cy="68" rx="40" ry="42" fill="#1a1208"/>
+      <!-- books on branches -->
+      <rect x="76" y="228" width="28" height="8" rx="1" fill="#8b3a2a" opacity="0.7"/>
+      <rect x="107" y="228" width="18" height="8" rx="1" fill="#c8a96e" opacity="0.7"/>
+      <rect x="198" y="198" width="24" height="8" rx="1" fill="#5a7a5a" opacity="0.7"/>
+      <rect x="64" y="168" width="22" height="8" rx="1" fill="#c8a96e" opacity="0.7"/>
+      <rect x="89" y="168" width="16" height="8" rx="1" fill="#8b3a2a" opacity="0.7"/>
+      <rect x="208" y="148" width="20" height="8" rx="1" fill="#5a7a5a" opacity="0.7"/>
+    </svg>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num" id="hero-branch-count">—</span>
+        <span class="hero-stat-label">Active Branches in Riverside</span>
+      </div>
+      <div class="hero-rule"></div>
+      <div style="border-left:3px solid var(--accent);padding-left:1.25rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--warm);margin-bottom:0.5rem;">Our Mission</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.15rem;font-style:italic;line-height:1.6;color:var(--ink);">No book worth reading should collect dust on a shelf.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about-section" id="about">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-label" style="display:none"></span>
+      <h2 class="section-title">About</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-body">
+        <p>The Library Branch rescues used books from local library book stores and redistributes them throughout the community through scheduled book drops, locally sponsored Book Adoption Branches, and stocking existing Little Free Libraries.</p>
+        <p>What started as trying to find a new home for a couple extra books grew into an initiative to bring neighbors together through a love of reading.</p>
+        <p>Our goal for 2026 is to facilitate the redistribution of 500 books!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANCHES -->
+<section class="section branches-section" id="branches">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 class="section-title">Book Adoption Branches</h2>
+    </div>
+    <div id="branches-container">
+      <div class="loading-dots">Loading locations...</div>
+    </div>
+  </div>
+</section>
+
+<!-- LFL ORDERS -->
+<section class="section orders-section" id="orders">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 class="section-title">Little Free Library Book Requests</h2>
+    </div>
+    <div class="orders-intro">
+      <p>Do you steward a Little Free Library in Riverside? Browse what's currently in our inventory, select the titles you want, and submit your request. We'll be in touch to coordinate a drop-off.</p>
+      <p>This is free. Always.</p>
+    </div>
+    <div class="orders-layout">
+      <!-- Catalog -->
+      <div>
+        <div class="catalog-header">
+          <span class="catalog-label">Available titles</span>
+          <div class="catalog-filter" id="catalog-filter">
+            <button class="filter-btn active" onclick="filterCatalog('',this)">All</button>
+            <button class="filter-btn" onclick="filterCatalog('Children\'s',this)">Children's</button>
+            <button class="filter-btn" onclick="filterCatalog('Fiction',this)">Fiction</button>
+            <button class="filter-btn" onclick="filterCatalog('Non-Fiction',this)">Non-Fiction</button>
+            <button class="filter-btn" onclick="filterCatalog('Young Adult',this)">YA</button>
+          </div>
+        </div>
+        <div class="book-list" id="book-catalog">
+          <div class="loading-dots">Loading inventory...</div>
+        </div>
+      </div>
+      <!-- Order panel -->
+      <div class="order-panel">
+        <div class="order-panel-title">Your Request</div>
+        <div id="cart-empty-msg" class="cart-empty">Select titles from the list to add them to your request.</div>
+        <div id="cart-items" class="cart-items" style="display:none"></div>
+        <div class="contact-form" id="contact-form">
+          <div class="form-group">
+            <label class="form-label">Your name *</label>
+            <input class="form-input" id="f-name" type="text" placeholder="Full name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Little Free Library address *</label>
+            <input class="form-input" id="f-address" type="text" placeholder="Street address of your Little Free Library">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input class="form-input" id="f-email" type="email" placeholder="best way to reach you">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input class="form-input" id="f-phone" type="tel" placeholder="optional">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Anything else?</label>
+            <textarea class="form-textarea" id="f-message" placeholder="Preferred genres, timing, special drop-off instructions..."></textarea>
+          </div>
+          <button class="submit-btn" id="submit-btn" onclick="submitOrder()">Submit Request</button>
+        </div>
+        <div class="form-success" id="form-success">
+          <p>Request received.</p>
+          <small>We'll be in touch soon to coordinate your drop-off.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="section events-section" id="events">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 class="section-title">Events</h2>
+    </div>
+    <div id="events-container">
+      <div class="loading-dots" style="color:var(--muted)">Loading events...</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">The Library<br><span>Branch</span></div>
+      <div class="footer-tagline">Riverside, CA · thelibrarybranch.org</div>
+    </div>
+    <div class="footer-meta">
+      Community book-sharing initiative<br>
+      Book Adoption Branches · Little Free Library Restocking
+    </div>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, Timestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDtBO48uBogqcdv69VO9IH7MIG8Kb1YG10",
+  authDomain: "idk-money-tracker.firebaseapp.com",
+  projectId: "idk-money-tracker",
+  storageBucket: "idk-money-tracker.firebasestorage.app",
+  messagingSenderId: "1033439716188",
+  appId: "1:1033439716188:web:ebf8c149f68d3d568f9799"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const SPONSORS_COL  = 'bookANeighbor_sponsors';
+const INVENTORY_COL = 'tlb_inventory';
+const ORDERS_COL    = 'tlb_orders';
+const EVENTS_COL    = 'tlb_events';
+
+let allBooks     = [];
+let cart         = {}; // bookId → { title, author, qty, max }
+let activeFilter = '';
+
+// ── LOAD ALL ──────────────────────────────────────────
+async function init() {
+  await Promise.all([loadBranches(), loadInventory(), loadEvents()]);
+}
+
+async function loadBranches() {
+  try {
+    const snap = await getDocs(collection(db, SPONSORS_COL));
+    const branches = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(b => b.showOnSite && b.status === 'active');
+    renderBranches(branches);
+    document.getElementById('hero-branch-count').textContent = branches.length || '—';
+  } catch(e) {
+    document.getElementById('branches-container').innerHTML =
+      `<div class="branches-empty">Couldn't load locations right now.</div>`;
+  }
+}
+
+async function loadInventory() {
+  try {
+    const snap = await getDocs(collection(db, INVENTORY_COL));
+    allBooks = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(b => b.showOnSite && (b.quantity||0) > 0);
+    allBooks.sort((a,b) => (a.title||'').localeCompare(b.title||''));
+    renderCatalog();
+  } catch(e) {
+    document.getElementById('book-catalog').innerHTML =
+      `<div class="loading-dots">Couldn't load inventory.</div>`;
+  }
+}
+
+async function loadEvents() {
+  try {
+    const snap = await getDocs(collection(db, EVENTS_COL));
+    const now = new Date().toISOString().split('T')[0];
+    const events = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(e => e.showOnSite && e.date >= now)
+      .sort((a,b) => a.date.localeCompare(b.date));
+    renderEvents(events);
+  } catch(e) {
+    document.getElementById('events-container').innerHTML =
+      `<div class="events-empty">Couldn't load events right now.</div>`;
+  }
+}
+
+// ── RENDER BRANCHES ───────────────────────────────────
+function renderBranches(branches) {
+  const el = document.getElementById('branches-container');
+  if (!branches.length) {
+    el.innerHTML = `<div class="branches-empty">Branches coming soon. Check back shortly.</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="branches-grid">${branches.map(b => {
+    const locs = b.locations || [];
+    return `<div class="branch-card">
+      <span class="branch-status">Active Branch</span>
+      <div class="branch-name">${esc(b.name)}</div>
+      ${locs.length ? `<div class="branch-locs">${locs.map(l => `<div class="branch-loc">${esc(l)}</div>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ── RENDER CATALOG ────────────────────────────────────
+window.filterCatalog = (genre, btn) => {
+  activeFilter = genre;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCatalog();
+};
+
+function renderCatalog() {
+  const filtered = activeFilter
+    ? allBooks.filter(b => b.genre === activeFilter)
+    : allBooks;
+  const el = document.getElementById('book-catalog');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="loading-dots">No titles available in this category right now.</div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(b => {
+    const inCart   = cart[b.id];
+    const selected = inCart ? 'selected' : '';
+    return `<div class="book-item ${selected}" id="book-item-${b.id}" onclick="toggleBook('${b.id}')">
+      <div class="book-item-info">
+        <div class="book-item-title">${esc(b.title)}</div>
+        ${b.author ? `<div class="book-item-author">by ${esc(b.author)}</div>` : ''}
+        ${b.genre  ? `<div class="book-item-genre">${esc(b.genre)}</div>` : ''}
+      </div>
+      <div>
+        <div class="book-item-qty">${b.quantity}</div>
+        <div class="book-item-qty-label">avail.</div>
+      </div>
+      <button class="book-item-add" onclick="event.stopPropagation();toggleBook('${b.id}')" title="Add to request">
+        ${inCart ? '✓' : '+'}
+      </button>
+    </div>`;
+  }).join('');
+}
+
+// ── CART ──────────────────────────────────────────────
+window.toggleBook = (id) => {
+  const book = allBooks.find(b => b.id === id);
+  if (!book) return;
+  if (cart[id]) {
+    delete cart[id];
+  } else {
+    cart[id] = { title: book.title, author: book.author||'', qty: 1, max: book.quantity };
+  }
+  renderCatalog();
+  renderCart();
+};
+
+window.changeQty = (id, delta) => {
+  if (!cart[id]) return;
+  const newQty = cart[id].qty + delta;
+  if (newQty < 1) { delete cart[id]; }
+  else if (newQty > cart[id].max) { showToast('That\'s all we have in stock', 'error'); return; }
+  else { cart[id].qty = newQty; }
+  renderCatalog();
+  renderCart();
+};
+
+window.removeFromCart = (id) => {
+  delete cart[id];
+  renderCatalog();
+  renderCart();
+};
+
+function renderCart() {
+  const items = Object.entries(cart);
+  const emptyMsg   = document.getElementById('cart-empty-msg');
+  const cartItemsEl = document.getElementById('cart-items');
+  if (!items.length) {
+    emptyMsg.style.display = 'block';
+    cartItemsEl.style.display = 'none';
+    cartItemsEl.innerHTML = '';
+    return;
+  }
+  emptyMsg.style.display = 'none';
+  cartItemsEl.style.display = 'block';
+  cartItemsEl.innerHTML = items.map(([id, item]) => `
+    <div class="cart-item">
+      <span class="cart-item-title">${esc(item.title)}</span>
+      <div class="cart-qty-ctrl">
+        <button class="qty-btn" onclick="changeQty('${id}',-1)">−</button>
+        <span class="qty-display">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty('${id}',1)">+</button>
+      </div>
+      <button class="cart-remove" onclick="removeFromCart('${id}')" title="Remove">×</button>
+    </div>`).join('');
+}
+
+// ── SUBMIT ORDER ──────────────────────────────────────
+window.submitOrder = async () => {
+  const name    = document.getElementById('f-name').value.trim();
+  const address = document.getElementById('f-address').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const phone   = document.getElementById('f-phone').value.trim();
+  const message = document.getElementById('f-message').value.trim();
+
+  if (!name)    { showToast('Please enter your name', 'error'); return; }
+  if (!address) { showToast('Please enter your LFL address', 'error'); return; }
+  if (!email)   { showToast('Please enter your email', 'error'); return; }
+  if (!Object.keys(cart).length) { showToast('Please select at least one book', 'error'); return; }
+
+  const books = Object.entries(cart).map(([id, item]) => ({
+    bookId: id,
+    title:  item.title,
+    author: item.author,
+    qty:    item.qty
+  }));
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try {
+    await addDoc(collection(db, ORDERS_COL), {
+      name, lflAddress: address, email, phone, message,
+      books,
+      status: 'new',
+      createdAt: Timestamp.now()
+    });
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('cart-items').style.display = 'none';
+    document.getElementById('cart-empty-msg').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+    cart = {};
+    renderCatalog();
+  } catch(e) {
+    showToast('Something went wrong. Please try again.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Submit Request';
+  }
+};
+
+// ── RENDER EVENTS ─────────────────────────────────────
+function renderEvents(events) {
+  const el = document.getElementById('events-container');
+  if (!events.length) {
+    el.innerHTML = `<div class="events-empty">No upcoming events right now. Check back soon.</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="events-grid">${events.map(e => {
+    const d = new Date(e.date + 'T00:00:00');
+    const month = d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    const day   = d.getDate();
+    const year  = d.getFullYear();
+    const timeStr = e.time ? formatTime(e.time) : '';
+    return `<div class="event-card">
+      <div class="event-date-block">
+        <div class="event-month">${month}</div>
+        <div class="event-day">${day}</div>
+        <div class="event-year">${year}</div>
+      </div>
+      <div class="event-title-pub">${esc(e.title)}</div>
+      ${timeStr ? `<div class="event-time">${timeStr}</div>` : ''}
+      ${e.location ? `<div class="event-loc">📍 ${esc(e.location)}</div>` : ''}
+      ${e.description ? `<div class="event-desc-pub">${esc(e.description)}</div>` : ''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function formatTime(t) {
+  if (!t) return '';
+  const [h, m] = t.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+
+// ── HELPERS ───────────────────────────────────────────
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let toastTimer;
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = '', 3500);
+}
+window.showToast = showToast;
+
+// ── KICK OFF ──────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
